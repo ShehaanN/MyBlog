@@ -1,25 +1,28 @@
 import { ArrowRight, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface BlogCardProps {
   id: number;
   title: string;
-  excerpt: string;
-  author: string;
-  date: string;
-  category: string;
   slug: string;
-  viewCount?: number;
+  excerpt: string;
+  content: string;
+  author: string;
+  category: string;
+  created_at: string;
+  updated_at: string;
+  reading_time: string;
+  view_count: number;
 }
 
 const BlogCard = ({
   title,
   excerpt,
   author,
-  date,
+  created_at,
   category,
   slug,
-  viewCount = 0,
 }: BlogCardProps) => {
   return (
     <article className="group p-6 rounded-lg bg-card border border-border hover:border-primary transition space-y-4">
@@ -28,9 +31,11 @@ const BlogCard = ({
           {category}
         </span>
 
-        <h3 className="text-xl font-bold group-hover:text-primary transition text-balance">
-          {title}
-        </h3>
+        <Link href={`/blog/${slug}`}>
+          <h3 className="text-xl font-bold group-hover:text-primary transition text-balance">
+            {title}
+          </h3>
+        </Link>
       </div>
 
       <p className="text-muted-foreground line-clamp-2">{excerpt}</p>
@@ -44,7 +49,7 @@ const BlogCard = ({
           <div className="flex items-center gap-1">
             <Calendar className="w-4 h-4" />
             <span>
-              {new Date(date).toLocaleDateString("en-US", {
+              {new Date(created_at).toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
               })}
@@ -52,9 +57,11 @@ const BlogCard = ({
           </div>
         </div>
 
-        <Button variant="ghost" size="sm" className="gap-2">
-          Read <ArrowRight className="w-4 h-4" />
-        </Button>
+        <Link href={`/blog/${slug}`}>
+          <Button variant="ghost" size="sm" className="gap-2">
+            Read <ArrowRight className="w-4 h-4" />
+          </Button>
+        </Link>
       </div>
     </article>
   );
