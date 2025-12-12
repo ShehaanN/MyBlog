@@ -15,7 +15,7 @@ const LoginPage = () => {
     console.log("Submitted:", { email, password });
   };
   return (
-    <main className="min-h-screen bg-background flex flex-col">
+    <main className="min-h-screen bg-gray-100 flex flex-col">
       {/* Login Form */}
       <div className=" flex-1 flex items-center justify-center px-6 py-12">
         <div className="bg-white p-6 rounded-lg w-full max-w-lg space-y-8">
