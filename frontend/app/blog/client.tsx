@@ -1,8 +1,9 @@
 "use client";
 
 import BlogHeader from "@/components/blog-header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import BlogCard from "@/components/blog-card";
 
 const BlogPageClient = () => {
   const allBlogPosts = [
@@ -71,14 +72,51 @@ const BlogPageClient = () => {
       slug: "api-security-best-practices",
       viewCount: 267,
     },
+    {
+      id: 7,
+      title: "Understanding GraphQL",
+      excerpt: "A comprehensive guide to GraphQL and how it differs from REST.",
+      author: "John Smith",
+      date: "2025-01-09",
+      category: "Development",
+      slug: "understanding-graphql",
+      viewCount: 198,
+    },
+    {
+      id: 8,
+      title: "Microservices Architecture",
+      excerpt:
+        "An introduction to microservices architecture and its benefits.",
+      author: "Emma Johnson",
+      date: "2025-01-08",
+      category: "Development",
+      slug: "microservices-architecture",
+      viewCount: 345,
+    },
   ];
 
+  const [posts, setPosts] = useState(allBlogPosts);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [displayCount, setDisplayCount] = useState(6);
+
+  useEffect(() => {
+    if (selectedCategory === "All") {
+      setPosts(allBlogPosts);
+    } else {
+      setPosts(
+        allBlogPosts.filter((post) => post.category === selectedCategory)
+      );
+    }
+  }, [selectedCategory]);
+
+  console.log(posts);
 
   const categories = [
     "All",
     ...new Set(allBlogPosts.map((post) => post.category)),
   ];
+
+  const displayedPosts = posts.slice(0, displayCount);
 
   return (
     <main className="min-h-screen bg-background flex flex-col">
@@ -109,6 +147,38 @@ const BlogPageClient = () => {
               </Button>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Blog Posts Grid */}
+      <section className="px-6 py-12 flex-1">
+        <div className="max-w-6xl mx-auto">
+          {displayedPosts.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-lg text-muted-foreground mb-4">
+                No posts found
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {displayedPosts.map((post) => (
+                  <BlogCard key={post.id} {...post} />
+                ))}
+              </div>
+
+              {displayCount < posts.length && (
+                <div className="flex justify-center">
+                  <Button
+                    variant="outline"
+                    onClick={() => setDisplayCount(displayCount + 6)}
+                  >
+                    Load More
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
     </main>
