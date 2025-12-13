@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus, Search, Filter } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 interface Post {
   id: number;
@@ -200,11 +201,12 @@ Good CI/CD practices reduce risk and increase developer confidence.`,
                   Manage all your blog posts
                 </p>
               </div>
-
-              <Button className="gap-2">
-                <Plus className="w-4 h-4" />
-                New Post
-              </Button>
+              <Link href="/cms/posts/new">
+                <Button className="gap-2">
+                  <Plus className="w-4 h-4" />
+                  New Post
+                </Button>
+              </Link>
             </div>
 
             {/* Filters */}
