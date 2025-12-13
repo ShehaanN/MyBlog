@@ -18,7 +18,9 @@ const CMSSidebar = () => {
       >
         <div className="p-6 space-y-8">
           <div className="pt-2">
-            <h1 className="text-2xl font-bold text-primary">MyBlog</h1>
+            <Link href={"/blog"}>
+              <h1 className="text-2xl font-bold text-primary">MyBlog</h1>
+            </Link>
             <p className="text-xs text-muted-foreground">Admin Dashboard</p>
           </div>
 
@@ -47,7 +49,7 @@ const CMSSidebar = () => {
               className="w-full gap-2 justify-start bg-transparent"
               asChild
             >
-              <Link href="#">
+              <Link href="/blog">
                 <LogOut className="w-5 h-5" />
                 Logout
               </Link>

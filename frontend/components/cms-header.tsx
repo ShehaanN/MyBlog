@@ -1,5 +1,9 @@
 const CMSHeader = () => {
-  const user = { name: "Shehan Nadeesha", email: "shehan@gmail.com" };
+  const user = {
+    id: 1,
+    name: "Shehan Nadeesha",
+    email: "shehan@gmail.com",
+  };
   return (
     <header className="sticky top-0 z-40 bg-background border-b border-border">
       <div className="px-6 py-4 flex items-center justify-between">

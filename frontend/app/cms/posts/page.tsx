@@ -17,9 +17,25 @@ import {
 import { Plus, Search, Filter } from "lucide-react";
 import { useState } from "react";
 
+interface Post {
+  id: number;
+  title: string;
+  excerpt: string;
+  slug: string;
+  content: string;
+  author: string;
+  createdAt: string;
+  category: string;
+  updatedAt: string;
+  status: "published" | "draft" | "archived";
+  readingTime: string;
+  viewCount: number;
+}
+
 const PostsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const posts = [
+
+  const [posts, setPosts] = useState<Post[]>([
     {
       id: 1,
       title: "Getting Started with Next.js 15",
@@ -161,7 +177,7 @@ Good CI/CD practices reduce risk and increase developer confidence.`,
       readingTime: "5 min read",
       viewCount: 329,
     },
-  ];
+  ]);
 
   const filteredPosts = posts.filter(
     (post) =>

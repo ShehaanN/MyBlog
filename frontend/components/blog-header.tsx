@@ -6,6 +6,11 @@ import Link from "next/link";
 import { useState } from "react";
 
 const BlogHeader = () => {
+  const user = {
+    id: 1,
+    name: "Shehan Nadeesha",
+    email: "shehan@gmail.com",
+  };
   const [searchOpen, setSearchOpen] = useState(false);
   return (
     <nav className="sticky top-0 z-40 backdrop-blur-sm bg-background/80 border-b border-border">
@@ -13,8 +18,8 @@ const BlogHeader = () => {
         <div className="flex items-center justify-between">
           <div>
             <Link
-              href="/"
-              className="font-bold text-lg hover:text-primary transition"
+              href="/blog"
+              className="font-bold text-2xl hover:text-primary transition"
             >
               MyBlog
             </Link>
@@ -27,11 +32,30 @@ const BlogHeader = () => {
             >
               <Search className="w-5 h-5" />
             </button>
-            <Link href="/auth/login">
-              <Button variant="outline" size="sm">
-                Login
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <Link
+                  href="/cms/posts"
+                  className="text-foreground hover:text-primary transition"
+                >
+                  <Button variant="outline" size="sm">
+                    Dashboard
+                  </Button>
+                </Link>
+
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="font-semibold text-sm">
+                    {user.name.charAt(0)}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <Link href="/auth/login">
+                <Button variant="outline" size="sm">
+                  Login
+                </Button>
+              </Link>
+            )}
           </div>
         </div>
         {searchOpen && (

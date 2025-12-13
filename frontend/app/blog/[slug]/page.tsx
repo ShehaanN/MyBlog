@@ -7,6 +7,21 @@ import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+interface BlogPost {
+  id: number;
+  title: string;
+  excerpt: string;
+  slug: string;
+  content: string;
+  author: string;
+  createdAt: string;
+  category: string;
+  updatedAt: string;
+  status: "published" | "draft" | "archived";
+  readingTime: string;
+  viewCount: number;
+}
+
 const allBlogPosts = [
   {
     id: 1,
@@ -51,6 +66,7 @@ Next.js 15 is a powerful update that makes building modern web applications easi
     createdAt: "2025-01-15",
     category: "Development",
     updatedAt: "2025-01-16",
+    status: "published",
     readingTime: "5 min read",
     viewCount: 245,
   },
@@ -82,6 +98,7 @@ Adopting these patterns helps prevent technical debt and keeps TypeScript a prod
     createdAt: "2025-02-03",
     category: "TypeScript",
     updatedAt: "2025-02-04",
+    status: "published",
     readingTime: "6 min read",
     viewCount: 412,
   },
@@ -112,6 +129,7 @@ Invest in a design system early to save time and maintain consistency across pro
     createdAt: "2025-03-10",
     category: "Design",
     updatedAt: "2025-03-12",
+    status: "published",
     readingTime: "4 min read",
     viewCount: 178,
   },
@@ -142,6 +160,7 @@ Good CI/CD practices reduce risk and increase developer confidence.`,
     createdAt: "2025-04-01",
     category: "DevOps",
     updatedAt: "2025-04-02",
+    status: "published",
     readingTime: "5 min read",
     viewCount: 329,
   },
@@ -173,6 +192,7 @@ Quality unit tests improve long-term velocity and confidence.`,
     createdAt: "2025-05-18",
     category: "Testing",
     updatedAt: "2025-05-19",
+    status: "published",
     readingTime: "7 min read",
     viewCount: 287,
   },
@@ -204,6 +224,7 @@ Accessibility is a continuous effort — start small and iterate.`,
     createdAt: "2025-06-05",
     category: "Accessibility",
     updatedAt: "2025-06-05",
+    status: "published",
     readingTime: "3 min read",
     viewCount: 156,
   },
@@ -234,6 +255,7 @@ Combining the right habits with tools helps remote engineers produce consistent,
     createdAt: "2025-07-09",
     category: "Productivity",
     updatedAt: "2025-07-10",
+    status: "published",
     readingTime: "5 min read",
     viewCount: 203,
   },
@@ -266,6 +288,7 @@ Ensure secure tokens, rate limiting, and distributed tracing for edge functions 
     createdAt: "2025-08-12",
     category: "Infrastructure",
     updatedAt: "2025-08-13",
+    status: "published",
     readingTime: "6 min read",
     viewCount: 191,
   },
@@ -304,24 +327,10 @@ Monitor query patterns, enforce timeouts, and provide good developer docs to kee
     createdAt: "2025-09-21",
     category: "APIs",
     updatedAt: "2025-09-22",
-    readingTime: "8 min read",
+    status: "published",
     viewCount: 521,
   },
 ];
-
-interface BlogPost {
-  id: number;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  category: string;
-  createdAt: string;
-  updatedAt: string;
-  readingTime: string;
-  viewCount: number;
-}
 
 const BlogPostPage = () => {
   const { slug } = useParams();
