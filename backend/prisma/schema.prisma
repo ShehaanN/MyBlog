@@ -11,6 +11,8 @@ model Category {
   id        Int      @id @default(autoincrement())
   name      String   @unique
   slug      String   @unique
+  userId    Int
+  User      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime
   Post      Post[]
@@ -20,8 +22,8 @@ model Post {
   id          Int      @id @default(autoincrement())
   title       String
   slug        String   @unique
-  excerpt     String
-  content     String
+  excerpt     String   @db.Text
+  content     String   @db.LongText
   authorId    Int
   categoryId  Int
   status      String
@@ -44,4 +46,5 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime
   Post      Post[]
+  Category  Category[]
 }
