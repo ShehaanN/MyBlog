@@ -22,7 +22,7 @@ interface BlogPost {
   viewCount: number;
 }
 
-const allBlogPosts = [
+const allBlogPosts: BlogPost[] = [
   {
     id: 1,
     title: "Getting Started with Next.js 15",
@@ -292,51 +292,13 @@ Ensure secure tokens, rate limiting, and distributed tracing for edge functions 
     readingTime: "6 min read",
     viewCount: 191,
   },
-  {
-    id: 9,
-    title: "GraphQL Best Practices",
-    excerpt:
-      "Guidelines for designing scalable, performant, and secure GraphQL APIs.",
-    slug: "graphql-best-practices",
-    content: `Introduction
-
-GraphQL offers flexible data fetching but requires careful design to scale effectively.
-
-Schema Design
-
-• Design clear, intention-revealing types and avoid over-fetching
-• Use pagination (cursor-based) for list fields
-• Separate public and internal schemas when needed
-
-Performance
-
-• Batch and cache resolvers where appropriate
-• Implement persisted queries and query complexity analysis
-• Use data loaders to avoid N+1 query problems
-
-Security
-
-• Validate incoming queries and enforce rate limits
-• Authenticate and authorize at the resolver level
-• Avoid exposing implementation details in error messages
-
-Operational Concerns
-
-Monitor query patterns, enforce timeouts, and provide good developer docs to keep the API maintainable.`,
-    author: "Maya Chen",
-    createdAt: "2025-09-21",
-    category: "APIs",
-    updatedAt: "2025-09-22",
-    status: "published",
-    viewCount: 521,
-  },
 ];
 
 const BlogPostPage = () => {
   const { slug } = useParams();
   const postData = allBlogPosts.find((post) => post.slug === slug);
 
-  const [post, setPost] = useState<BlogPost | null>(postData ?? null);
+  const post = postData;
 
   console.log("post:", post);
 

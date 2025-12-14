@@ -376,7 +376,20 @@ Monitor query patterns, enforce timeouts, and provide good developer docs to kee
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                 {displayedPosts.map((post) => (
-                  <BlogCard key={post.id} {...post} />
+                  <BlogCard
+                    key={post.id}
+                    id={post.id}
+                    title={post.title}
+                    excerpt={post.excerpt}
+                    slug={post.slug}
+                    content={post.content}
+                    author={post.author}
+                    category={post.category}
+                    created_at={post.createdAt}
+                    updated_at={post.updatedAt}
+                    reading_time={post.readingTime}
+                    view_count={post.viewCount}
+                  />
                 ))}
               </div>
 
