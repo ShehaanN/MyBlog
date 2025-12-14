@@ -7,8 +7,10 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service.js';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 
 interface CreateCategoryDto {
   name: string;
@@ -24,12 +26,14 @@ export class CategoriesController {
 
   // Get all categories for a user
   @Get(':userId')
+  @UseGuards(JwtAuthGuard)
   async getAllCategories(@Param('userId', ParseIntPipe) userId: number) {
     return this.categoriesService.getAllCategories(userId);
   }
 
   // Get category by ID
   @Get(':id/:userId')
+  @UseGuards(JwtAuthGuard)
   async getCategoryById(
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -39,6 +43,7 @@ export class CategoriesController {
 
   // Create a new category
   @Post(':userId')
+  @UseGuards(JwtAuthGuard)
   async createCategory(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() createCategoryDto: CreateCategoryDto,
@@ -48,6 +53,7 @@ export class CategoriesController {
 
   // Update a category
   @Put(':id/:userId')
+  @UseGuards(JwtAuthGuard)
   async updateCategory(
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -58,6 +64,7 @@ export class CategoriesController {
 
   // Delete a category
   @Delete(':id/:userId')
+  @UseGuards(JwtAuthGuard)
   async deleteCategory(
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number,

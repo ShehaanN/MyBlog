@@ -7,8 +7,10 @@ import {
   Param,
   Body,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service.js';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard.js';
 
 interface CreatePostDto {
   title: string;
@@ -40,6 +42,7 @@ export class PostsController {
 
   // Get all posts for admin
   @Get('admin/:userId')
+  @UseGuards(JwtAuthGuard)
   async getAllPostsAdmin(@Param('userId', ParseIntPipe) userId: number) {
     return this.postsService.getAllPostsAdmin(userId);
   }
@@ -58,6 +61,7 @@ export class PostsController {
 
   // Create a new post
   @Post(':userId')
+  @UseGuards(JwtAuthGuard)
   async createPost(
     @Param('userId', ParseIntPipe) userId: number,
     @Body() createPostDto: CreatePostDto,
@@ -67,6 +71,7 @@ export class PostsController {
 
   // Update a post
   @Put(':id/:userId')
+  @UseGuards(JwtAuthGuard)
   async updatePost(
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number,
@@ -77,6 +82,7 @@ export class PostsController {
 
   // Delete a post
   @Delete(':id/:userId')
+  @UseGuards(JwtAuthGuard)
   async deletePost(
     @Param('id', ParseIntPipe) id: number,
     @Param('userId', ParseIntPipe) userId: number,
