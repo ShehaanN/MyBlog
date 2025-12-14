@@ -1,18 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const { login, loading, user } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (user) {
+      router.push("/blog");
+    }
+  }, [user, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Submitted:", { email, password });
+    setError("");
+
+    try {
+      await login({ email, password });
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
+    }
   };
   return (
     <main className="min-h-screen bg-gray-100 flex flex-col">
@@ -25,6 +46,9 @@ const LoginPage = () => {
               Sign in to your MyBlog account
             </p>
           </div>
+          {error && (
+            <div className="text-red-600 text-sm text-center">{error}</div>
+          )}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -49,8 +73,13 @@ const LoginPage = () => {
               />
             </div>
 
-            <Button type="submit" size="lg" className="w-full">
-              Sign In
+            <Button
+              type="submit"
+              disabled={loading}
+              size="lg"
+              className="w-full"
+            >
+              {loading ? "Signing in..." : "Sign in"}
             </Button>
           </form>
           <div className="text-center text-sm">

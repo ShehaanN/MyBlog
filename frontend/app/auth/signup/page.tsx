@@ -1,32 +1,40 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const SignupPage = () => {
+  const { register, loading, user } = useAuth();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (user) {
+      router.push("/blog");
+    }
+  }, [user, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
+    try {
+      await register({ name, email, password });
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
     }
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
-
-    console.log("Account created:", { name, email, password, confirmPassword });
   };
   return (
     <main className="min-h-screen bg-gray-100 flex flex-col">
@@ -103,8 +111,13 @@ const SignupPage = () => {
               />
             </div>
 
-            <Button type="submit" size="lg" className="w-full">
-              Create Account
+            <Button
+              type="submit"
+              disabled={loading}
+              size="lg"
+              className="w-full"
+            >
+              {loading ? "Creating account..." : "Register"}
             </Button>
           </form>
 
