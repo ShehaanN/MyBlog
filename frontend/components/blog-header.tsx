@@ -6,11 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 const BlogHeader = () => {
-  const user = {
-    id: 1,
-    name: "Shehan Nadeesha",
-    email: "shehan@gmail.com",
-  };
+  const user = null;
   const [searchOpen, setSearchOpen] = useState(false);
   return (
     <nav className="sticky top-0 z-40 backdrop-blur-sm bg-background/80 border-b border-border">
@@ -32,17 +28,17 @@ const BlogHeader = () => {
             >
               <Search className="w-5 h-5" />
             </button>
+
+            <Link
+              href="/cms/posts"
+              className="text-foreground hover:text-primary transition"
+            >
+              <Button variant="outline" size="sm">
+                Dashboard
+              </Button>
+            </Link>
             {user ? (
               <>
-                <Link
-                  href="/cms/posts"
-                  className="text-foreground hover:text-primary transition"
-                >
-                  <Button variant="outline" size="sm">
-                    Dashboard
-                  </Button>
-                </Link>
-
                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <span className="font-semibold text-sm">
                     {user.name.charAt(0)}

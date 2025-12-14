@@ -1,12 +1,7 @@
-import React from "react";
+import { redirect } from "next/navigation";
 
 const page = () => {
-  return (
-    <div>
-      <h1>My Blog</h1>
-      <p>Welcome to my blog page!</p>
-    </div>
-  );
+  redirect("/blog");
 };
 
 export default page;
