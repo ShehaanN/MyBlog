@@ -1,5 +1,5 @@
 export interface User {
-  id: string;
+  id: number;
   email: string;
   name: string;
 }
@@ -15,15 +15,11 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface AuthResponse {
-  access_token: string;
-  user: User;
-}
-
 export interface AuthContextType {
   user: User | null;
-  login: (credentials: LoginRequest) => Promise<void>;
-  register: (userData: RegisterRequest) => Promise<void>;
-  logout: () => void;
+  isAuthenticated: boolean;
   loading: boolean;
+  login: (credentials: LoginRequest) => Promise<void>;
+  logout: () => void;
+  register: (userData: RegisterRequest) => Promise<void>;
 }

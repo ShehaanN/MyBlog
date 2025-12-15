@@ -32,7 +32,7 @@ interface Post {
   Category: PostCategory;
   status: "published" | "draft" | "archived";
   readingTime?: string;
-  views: number;
+  viewCount: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -64,7 +64,7 @@ interface UpdatePostDto {
 }
 
 const getAuthToken = (): string | null => {
-  return localStorage.getItem("token");
+  return localStorage.getItem("auth_token");
 };
 
 const createHeaders = (includeAuth: boolean = true) => {
