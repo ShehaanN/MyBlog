@@ -181,10 +181,11 @@ const PostsPage = () => {
                         {new Date(post.createdAt).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 space-x-2">
-                        <Button variant="outline" size="sm">
-                          Edit
-                        </Button>
-
+                        <Link href={`/cms/posts/${post.id}/edit`}>
+                          <Button variant="outline" size="sm">
+                            Edit
+                          </Button>
+                        </Link>
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button variant="destructive" size="sm">
