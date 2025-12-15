@@ -7,13 +7,9 @@ interface BlogCardProps {
   title: string;
   slug: string;
   excerpt: string;
-  content: string;
   author: string;
   category: string;
   created_at: string;
-  updated_at: string;
-  reading_time: string;
-  view_count: number;
 }
 
 const BlogCard = ({

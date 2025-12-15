@@ -8,6 +8,18 @@ interface Category {
   updatedAt: string;
 }
 
+interface PostUser {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface PostCategory {
+  id: number;
+  name: string;
+  slug: string;
+}
+
 interface Post {
   id: number;
   title: string;
@@ -16,6 +28,8 @@ interface Post {
   slug: string;
   categoryId: number;
   userId: number;
+  User: PostUser;
+  Category: PostCategory;
   status: "published" | "draft" | "archived";
   readingTime?: string;
   views: number;

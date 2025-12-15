@@ -5,12 +5,13 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import BlogCard from "@/components/blog-card";
 import API from "@/lib/api";
+import { Post } from "@/lib/api";
 
 const BlogPageClient = () => {
-  const [posts, setPosts] = useState([]);
-  const [allPosts, setAllPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [allPosts, setAllPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const [displayCount, setDisplayCount] = useState(6);
@@ -24,8 +25,13 @@ const BlogPageClient = () => {
         setAllPosts(data);
         setPosts(data);
       } catch (err) {
-        setError(err.message || "Failed to fetch posts");
         console.error("Error fetching posts:", err);
+
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error");
+        }
       } finally {
         setLoading(false);
       }
@@ -121,13 +127,9 @@ const BlogPageClient = () => {
                     title={post.title}
                     excerpt={post.excerpt}
                     slug={post.slug}
-                    content={post.content}
                     author={post.User?.name}
                     category={post.Category?.name}
                     created_at={post.createdAt}
-                    updated_at={post.updatedAt}
-                    reading_time={post.readingTime}
-                    view_count={post.viewCount}
                   />
                 ))}
               </div>
