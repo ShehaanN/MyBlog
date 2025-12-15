@@ -236,3 +236,11 @@ The frontend will be running at **[http://localhost:3000](http://localhost:3000)
 
 ---
 
+###  Demo Login Credentials
+
+You can use the following demo account to log in and test the application:
+
+- **Email:** `test@gmail.com`
+- **Password:** `12345678`
+
+---
