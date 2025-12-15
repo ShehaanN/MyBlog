@@ -9,6 +9,8 @@ interface Category {
   Posts?: Post[];
 }
 
+export type PostStatus = "published" | "draft" | "archived";
+
 interface PostUser {
   id: number;
   name: string;

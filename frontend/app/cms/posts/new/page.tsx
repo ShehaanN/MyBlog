@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-import API, { Category } from "@/lib/api";
+import API, { Category, PostStatus } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 
 const NewPostPage = () => {
@@ -18,8 +18,8 @@ const NewPostPage = () => {
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState("");
-  const [status, setStatus] = useState();
+  const [category, setCategory] = useState<number | undefined>();
+  const [status, setStatus] = useState<PostStatus>();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,7 +65,7 @@ const NewPostPage = () => {
       setTitle("");
       setExcerpt("");
       setContent("");
-      setCategory("");
+      setCategory(undefined);
     } catch (error) {
       console.error("Error creating post:", error);
       if (error instanceof Error) {
@@ -140,7 +140,9 @@ const NewPostPage = () => {
                   <Label className="text-sm font-semibold">Category</Label>
                   <select
                     value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    onChange={(e) =>
+                      setCategory(Number(e.target.value) || undefined)
+                    }
                     className="w-full px-4 py-2 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Select a category</option>
@@ -156,7 +158,7 @@ const NewPostPage = () => {
                   <Label className="text-sm font-semibold">Status</Label>
                   <select
                     value={status}
-                    onChange={(e) => setStatus(e.target.value)}
+                    onChange={(e) => setStatus(e.target.value as PostStatus)}
                     className="w-full px-4 py-2 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="draft">Draft</option>

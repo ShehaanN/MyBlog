@@ -6,16 +6,85 @@ import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import API, { Category, PostStatus } from "@/lib/api";
 
 const EditPostPage = () => {
+  const { id } = useParams<{ id: string }>();
+  const [categories, setCategories] = useState<Category[]>([]);
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState("");
-  const [status, setStatus] = useState("draft");
+  const [category, setCategory] = useState<number | undefined>();
+  const [status, setStatus] = useState<PostStatus>();
 
-  const handleSave = async () => {};
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  console.log("Cateies", categories);
+
+  useEffect(() => {
+    const getPostData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const categoriesData = await API.getAllPublicCategories();
+
+        setCategories(categoriesData);
+
+        const data = await API.getPostById(Number(id));
+
+        console.log("Data", data);
+
+        if (data) {
+          setTitle(data.title);
+          setExcerpt(data.excerpt);
+          setContent(data.content);
+          setCategory(data.categoryId);
+          setStatus(data.status as PostStatus);
+        }
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getPostData();
+  }, [id]);
+
+  const handleSave = async () => {
+    if (!user) return;
+    try {
+      setLoading(true);
+      setError(null);
+      await API.updatePost(Number(id), user.id, {
+        title,
+        excerpt,
+        content,
+        categoryId: Number(category),
+        status,
+      });
+    } catch (error) {
+      console.error("Error creating post:", error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -73,11 +142,18 @@ const EditPostPage = () => {
                 <div className="space-y-2">
                   <label className="text-sm font-semibold">Category</label>
                   <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
+                    value={category || ""}
+                    onChange={(e) =>
+                      setCategory(Number(e.target.value) || undefined)
+                    }
                     className="w-full px-4 py-2 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="">Select a category</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -85,7 +161,7 @@ const EditPostPage = () => {
                   <label className="text-sm font-semibold">Status</label>
                   <select
                     value={status}
-                    onChange={(e) => setStatus(e.target.value)}
+                    onChange={(e) => setStatus(e.target.value as PostStatus)}
                     className="w-full px-4 py-2 rounded-lg border border-border bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                   >
                     <option value="draft">Draft</option>
