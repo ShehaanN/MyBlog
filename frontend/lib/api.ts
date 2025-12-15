@@ -32,7 +32,7 @@ interface Post {
   Category: PostCategory;
   status: "published" | "draft" | "archived";
   readingTime?: string;
-  views: number;
+  viewCount: number;
   createdAt: string;
   updatedAt: string;
 }
