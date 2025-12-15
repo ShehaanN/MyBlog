@@ -2,37 +2,50 @@
 
 import CMSHeader from "@/components/cms-header";
 import CMSSidebar from "@/components/cms-sidebar";
-import { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-
-import API, { Category, PostStatus } from "@/lib/api";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import API, { Category, PostStatus } from "@/lib/api";
 
-const NewPostPage = () => {
+const EditPostPage = () => {
+  const { id } = useParams<{ id: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
-
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState<number | undefined>();
   const [status, setStatus] = useState<PostStatus>();
 
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useAuth();
+
+  console.log("Cateies", categories);
 
   useEffect(() => {
-    const getAllPublicCategories = async () => {
+    const getPostData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await API.getAllPublicCategories();
+        const categoriesData = await API.getAllPublicCategories();
 
-        setCategories(data);
+        setCategories(categoriesData);
+
+        const data = await API.getPostById(Number(id));
+
+        console.log("Data", data);
+
+        if (data) {
+          setTitle(data.title);
+          setExcerpt(data.excerpt);
+          setContent(data.content);
+          setCategory(data.categoryId);
+          setStatus(data.status as PostStatus);
+        }
       } catch (err) {
         console.error("Error fetching posts:", err);
 
@@ -46,26 +59,21 @@ const NewPostPage = () => {
       }
     };
 
-    getAllPublicCategories();
-  }, [user]);
+    getPostData();
+  }, [id]);
 
   const handleSave = async () => {
     if (!user) return;
     try {
       setLoading(true);
       setError(null);
-      await API.createPost(user.id, {
+      await API.updatePost(Number(id), user.id, {
         title,
         excerpt,
         content,
         categoryId: Number(category),
         status,
       });
-
-      setTitle("");
-      setExcerpt("");
-      setContent("");
-      setCategory(undefined);
     } catch (error) {
       console.error("Error creating post:", error);
       if (error instanceof Error) {
@@ -84,9 +92,9 @@ const NewPostPage = () => {
 
       <div className="flex-1 flex flex-col">
         <CMSHeader />
+
         <main className="flex-1 px-6 py-8 overflow-auto">
           <div className="max-w-4xl mx-auto space-y-6">
-            {/* Header */}
             <div className="flex items-center justify-between">
               <Link
                 href="/cms/posts"
@@ -95,16 +103,14 @@ const NewPostPage = () => {
                 <ArrowLeft className="w-4 h-4" />
                 Back to Posts
               </Link>
-              <div className="flex gap-2">
-                <Button onClick={handleSave}>Publish</Button>
+              <div>
+                <Button onClick={handleSave}>Update</Button>
               </div>
             </div>
 
-            {/* Form */}
             <div className="space-y-6">
-              {/* Title */}
               <div className="space-y-2">
-                <Label className="text-sm font-semibold">Title</Label>
+                <label className="text-sm font-semibold">Title</label>
                 <Input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -113,9 +119,8 @@ const NewPostPage = () => {
                 />
               </div>
 
-              {/* Excerpt */}
               <div className="space-y-2">
-                <Label className="text-sm font-semibold">Excerpt</Label>
+                <label className="text-sm font-semibold">Excerpt</label>
                 <Input
                   value={excerpt}
                   onChange={(e) => setExcerpt(e.target.value)}
@@ -123,9 +128,8 @@ const NewPostPage = () => {
                 />
               </div>
 
-              {/* Content */}
               <div className="space-y-2">
-                <Label className="text-sm font-semibold">Content</Label>
+                <label className="text-sm font-semibold">Content</label>
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
@@ -134,12 +138,11 @@ const NewPostPage = () => {
                 />
               </div>
 
-              {/* Category and Status */}
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label className="text-sm font-semibold">Category</Label>
+                  <label className="text-sm font-semibold">Category</label>
                   <select
-                    value={category}
+                    value={category || ""}
                     onChange={(e) =>
                       setCategory(Number(e.target.value) || undefined)
                     }
@@ -155,7 +158,7 @@ const NewPostPage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-sm font-semibold">Status</Label>
+                  <label className="text-sm font-semibold">Status</label>
                   <select
                     value={status}
                     onChange={(e) => setStatus(e.target.value as PostStatus)}
@@ -175,4 +178,4 @@ const NewPostPage = () => {
   );
 };
 
-export default NewPostPage;
+export default EditPostPage;

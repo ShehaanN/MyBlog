@@ -51,6 +51,7 @@ const CategoriesPage = () => {
   };
 
   const handleSaveCategory = async (id: number, newName: string) => {
+    if (!user) return;
     try {
       const updatedCategory = await API.updateCategory(id, user.id, {
         name: newName,
@@ -71,6 +72,7 @@ const CategoriesPage = () => {
   };
   const handleAddCategory = async () => {
     try {
+      if (!user) return;
       await API.createCategory(user.id, { name: newCategory });
       setNewCategory("");
       const data = await API.getAllCategories(user.id);
@@ -87,6 +89,7 @@ const CategoriesPage = () => {
 
   const handleDeleteCategory = async (id: number) => {
     try {
+      if (!user) return;
       await API.deleteCategory(id, user.id);
       const data = await API.getAllCategories(user.id);
       setCategories(data);
