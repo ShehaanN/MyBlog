@@ -64,7 +64,7 @@ interface UpdatePostDto {
 }
 
 const getAuthToken = (): string | null => {
-  return localStorage.getItem("token");
+  return localStorage.getItem("auth_token");
 };
 
 const createHeaders = (includeAuth: boolean = true) => {
