@@ -57,6 +57,27 @@ const PostsPage = () => {
     fetchAllAdminPosts();
   }, [user]);
 
+  const handleDeletePost = async (postId: number) => {
+    if (!user) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      await API.deletePost(postId, user.id);
+      const data = await API.getAllPostsAdmin(user.id);
+      setPosts(data);
+    } catch (err) {
+      console.error("Error deleting post:", err);
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unexpected error");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const filteredPosts = posts.filter(
     (post) =>
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -184,7 +205,10 @@ const PostsPage = () => {
                               <DialogClose asChild>
                                 <Button variant="outline">Cancel</Button>
                               </DialogClose>
-                              <Button variant="destructive">
+                              <Button
+                                onClick={() => handleDeletePost(post.id)}
+                                variant="destructive"
+                              >
                                 Confirm Delete
                               </Button>
                             </DialogFooter>

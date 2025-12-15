@@ -2,35 +2,80 @@
 
 import CMSHeader from "@/components/cms-header";
 import CMSSidebar from "@/components/cms-sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-}
+import API, { Category } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 const NewPostPage = () => {
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "Development", slug: "development" },
-    { id: 2, name: "Design", slug: "design" },
-    { id: 3, name: "DevOps", slug: "devops" },
-    { id: 4, name: "Marketing", slug: "marketing" },
-  ]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const [title, setTitle] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
-  const [status, setStatus] = useState("draft");
+  const [status, setStatus] = useState();
 
-  const handleSave = () => {
-    console.log("Post saved:", { title, excerpt, content, category, status });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const getAllPublicCategories = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await API.getAllPublicCategories();
+
+        setCategories(data);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getAllPublicCategories();
+  }, [user]);
+
+  const handleSave = async () => {
+    if (!user) return;
+    try {
+      setLoading(true);
+      setError(null);
+      await API.createPost(user.id, {
+        title,
+        excerpt,
+        content,
+        categoryId: Number(category),
+        status,
+      });
+
+      setTitle("");
+      setExcerpt("");
+      setContent("");
+      setCategory("");
+    } catch (error) {
+      console.error("Error creating post:", error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,7 +96,6 @@ const NewPostPage = () => {
                 Back to Posts
               </Link>
               <div className="flex gap-2">
-                <Button variant="outline">Save as Draft</Button>
                 <Button onClick={handleSave}>Publish</Button>
               </div>
             </div>
@@ -101,7 +145,7 @@ const NewPostPage = () => {
                   >
                     <option value="">Select a category</option>
                     {categories.map((category) => (
-                      <option key={category.id} value={category.slug}>
+                      <option key={category.id} value={category.id}>
                         {category.name}
                       </option>
                     ))}
