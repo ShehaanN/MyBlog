@@ -6,6 +6,7 @@ interface Category {
   userId: number;
   createdAt: string;
   updatedAt: string;
+  Posts?: Post[];
 }
 
 interface PostUser {
