@@ -98,6 +98,19 @@ class API {
     return response.json();
   }
 
+  static async getAllPublicCategories(): Promise<Category[]> {
+    const response = await fetch(`${BASE_URL}/categories`, {
+      method: "GET",
+      headers: createHeaders(false),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
   static async getCategoryById(id: number, userId: number): Promise<Category> {
     const response = await fetch(`${BASE_URL}/categories/${id}/${userId}`, {
       method: "GET",

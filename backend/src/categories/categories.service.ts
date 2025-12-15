@@ -18,6 +18,18 @@ interface UpdateCategoryDto {
 export class CategoriesService {
   constructor(private readonly db: PrismaService) {}
 
+  // Get all categories
+  async getAllPublicCategories() {
+    try {
+      return await this.db.category.findMany();
+    } catch (error) {
+      console.error('getAllCategories error:', error);
+      throw new InternalServerErrorException(
+        'Failed to get available categories',
+      );
+    }
+  }
+
   // Get all categories for a user
   async getAllCategories(UserId: number) {
     try {
