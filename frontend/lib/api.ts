@@ -6,6 +6,7 @@ interface Category {
   userId: number;
   createdAt: string;
   updatedAt: string;
+  Posts?: Post[];
 }
 
 interface PostUser {
@@ -88,6 +89,19 @@ class API {
     const response = await fetch(`${BASE_URL}/categories/${userId}`, {
       method: "GET",
       headers: createHeaders(),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error: ${response.status} ${response.statusText}`);
+    }
+
+    return response.json();
+  }
+
+  static async getAllPublicCategories(): Promise<Category[]> {
+    const response = await fetch(`${BASE_URL}/categories`, {
+      method: "GET",
+      headers: createHeaders(false),
     });
 
     if (!response.ok) {

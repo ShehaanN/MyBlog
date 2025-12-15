@@ -31,6 +31,12 @@ export class CategoriesController {
     return this.categoriesService.getAllCategories(userId);
   }
 
+  // Get all public categories
+  @Get()
+  async getAllPublicCategories() {
+    return this.categoriesService.getAllPublicCategories();
+  }
+
   // Get category by ID
   @Get(':id/:userId')
   @UseGuards(JwtAuthGuard)

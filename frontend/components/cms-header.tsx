@@ -1,9 +1,7 @@
+import { useAuth } from "@/context/AuthContext";
+
 const CMSHeader = () => {
-  const user = {
-    id: 1,
-    name: "Shehan Nadeesha",
-    email: "shehan@gmail.com",
-  };
+  const { user } = useAuth();
   return (
     <header className="sticky top-0 z-40 bg-background border-b border-border">
       <div className="px-6 py-4 flex items-center justify-between">
@@ -15,7 +13,7 @@ const CMSHeader = () => {
           <div className="flex items-center gap-3 ">
             <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
               <span className="font-semibold text-sm">
-                {user.name.charAt(0)}
+                {user.name.charAt(0).toUpperCase()}
               </span>
             </div>
             <div>

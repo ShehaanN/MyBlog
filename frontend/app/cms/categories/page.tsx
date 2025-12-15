@@ -5,39 +5,101 @@ import CMSSidebar from "@/components/cms-sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-}
+import API, { Category } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 
 const CategoriesPage = () => {
   const [newCategory, setNewCategory] = useState("");
   const [editingCategory, setEditingCategory] = useState<number | null>(null);
-  const [categories, setCategories] = useState<Category[]>([
-    { id: 1, name: "Development", slug: "development" },
-    { id: 2, name: "Design", slug: "design" },
-    { id: 3, name: "DevOps", slug: "devops" },
-  ]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  console.log("Categories", categories);
+
+  useEffect(() => {
+    const fetchAllAdminCategories = async () => {
+      if (!user) return;
+
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await API.getAllCategories(user.id);
+
+        setCategories(data);
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unexpected error");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllAdminCategories();
+  }, [user]);
+
   const handleEditCategory = (id: number) => {
     setEditingCategory(id);
   };
 
-  const handleSaveCategory = (id: number, newName: string) => {
-    console.log("Saving category:", id, newName);
+  const handleSaveCategory = async (id: number, newName: string) => {
+    try {
+      const updatedCategory = await API.updateCategory(id, user.id, {
+        name: newName,
+      });
+
+      const data = await API.getAllCategories(user.id);
+      setCategories(data);
+    } catch (error) {
+      console.error("Error updating category:", error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error");
+      }
+    }
 
     setEditingCategory(null);
   };
-  const handleAddCategory = () => {
-    const category = {
-      name: newCategory,
-      slug: newCategory.toLowerCase().replace(/\s+/g, "-"),
-    };
-    console.log("Adding category:", category);
-    setNewCategory("");
+  const handleAddCategory = async () => {
+    try {
+      await API.createCategory(user.id, { name: newCategory });
+      setNewCategory("");
+      const data = await API.getAllCategories(user.id);
+      setCategories(data);
+    } catch (error) {
+      console.error("Error adding category:", error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error");
+      }
+    }
   };
+
+  const handleDeleteCategory = async (id: number) => {
+    try {
+      await API.deleteCategory(id, user.id);
+      const data = await API.getAllCategories(user.id);
+      setCategories(data);
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unexpected error");
+      }
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-background">
       <CMSSidebar />
@@ -102,7 +164,11 @@ const CategoriesPage = () => {
                     >
                       Edit
                     </Button>
-                    <Button variant="destructive" size="sm">
+                    <Button
+                      onClick={() => handleDeleteCategory(category.id)}
+                      variant="destructive"
+                      size="sm"
+                    >
                       Delete
                     </Button>
                   </div>

@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import { FileText, Layers, LogOut } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const CMSSidebar = () => {
+  const { logout } = useAuth();
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
   const navItems = [
@@ -47,12 +49,10 @@ const CMSSidebar = () => {
             <Button
               variant="outline"
               className="w-full gap-2 justify-start bg-transparent"
-              asChild
+              onClick={logout}
             >
-              <Link href="/blog">
-                <LogOut className="w-5 h-5" />
-                Logout
-              </Link>
+              <LogOut className="w-5 h-5" />
+              Logout
             </Button>
           </div>
         </div>
