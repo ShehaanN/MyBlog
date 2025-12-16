@@ -18,8 +18,6 @@ const CategoriesPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("Categories", categories);
-
   useEffect(() => {
     const fetchAllAdminCategories = async () => {
       if (!user) return;

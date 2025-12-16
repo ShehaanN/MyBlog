@@ -24,8 +24,6 @@ const EditPostPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  console.log("Cateies", categories);
-
   useEffect(() => {
     const getPostData = async () => {
       try {

@@ -4,7 +4,7 @@ import BlogHeader from "@/components/blog-header";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
-import Image from "next/image";
+
 import Link from "next/link";
 import { Post } from "@/lib/api";
 import API from "@/lib/api";
@@ -70,13 +70,11 @@ const BlogPostPage = () => {
             {/* Article Info */}
             <div className="flex items-center gap-4 flex-wrap pt-4">
               <div className="flex items-center gap-2">
-                <Image
-                  src={"/mdp.jpg"}
-                  width={40}
-                  height={40}
-                  alt="Author Avatar"
-                  className="w-10 h-10 rounded-full bg-muted"
-                />
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="font-semibold text-sm">
+                    {post?.User?.name.charAt(0)}
+                  </span>
+                </div>
                 <div>
                   <p className="font-medium text-sm">{post?.User?.name}</p>
                   <p className="text-xs text-muted-foreground">

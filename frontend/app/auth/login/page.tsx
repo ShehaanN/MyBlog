@@ -19,7 +19,7 @@ const LoginPage = () => {
     if (user) {
       router.push("/blog");
     }
-  }, [user, router]);
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

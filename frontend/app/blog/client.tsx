@@ -60,8 +60,6 @@ const BlogPageClient = () => {
     }
   }, [selectedCategory, allPosts]);
 
-  console.log("PP", posts);
-
   const categories = [
     "All",
     ...new Set(allPosts.map((post) => post?.Category?.name).filter(Boolean)),

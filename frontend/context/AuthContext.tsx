@@ -60,13 +60,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       const { token, user } = await response.json();
 
-      console.log("Login successful userdat:", user);
-
       localStorage.setItem("auth_token", token);
       localStorage.setItem("auth_user", JSON.stringify(user));
 
       setUser(user);
-      router.push("/dashboard");
+      router.push("/blog");
     } catch (error) {
       throw error;
     } finally {
@@ -99,7 +97,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     localStorage.removeItem("auth_token");
     localStorage.removeItem("auth_user");
     setUser(null);
-    router.push("/auth/login");
+    router.push("/blog");
   };
 
   const value: AuthContextType = {

@@ -24,12 +24,10 @@ import { useAuth } from "@/context/AuthContext";
 const PostsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { user } = useAuth();
-  console.log("userfromcms", user);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  console.log("Posts", posts);
 
   useEffect(() => {
     const fetchAllAdminPosts = async () => {
