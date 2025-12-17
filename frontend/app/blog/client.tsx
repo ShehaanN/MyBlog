@@ -90,7 +90,7 @@ const BlogPageClient = () => {
       {!loading && !error && <></>}
 
       {/* Filters Section */}
-      <section className="px-6 py-8 border-b border-border sticky top-16 bg-background/95 backdrop-blur-sm">
+      <section className="px-6 py-8 border-b border-border sm:sticky top-16 bg-background/95 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto">
           <div className="flex gap-2 flex-wrap">
             {categories.map((category) => (

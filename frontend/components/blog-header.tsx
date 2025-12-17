@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { Search, SquarePen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
@@ -36,15 +36,22 @@ const BlogHeader = () => {
                   href="/cms/posts"
                   className="text-foreground hover:text-primary transition"
                 >
-                  <Button variant="outline" size="sm">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="hidden sm:inline-flex"
+                  >
                     Dashboard
                   </Button>
+                  <Button variant="outline" size="sm">
+                    <SquarePen className="inline-flex sm:hidden w-4 h-4" />
+                  </Button>
                 </Link>
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                {/* <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                   <span className="font-semibold text-sm">
                     {user?.name.charAt(0)}
                   </span>
-                </div>
+                </div> */}
               </>
             ) : (
               <Link href="/auth/login">
